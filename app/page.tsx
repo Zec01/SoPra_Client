@@ -21,7 +21,7 @@ export default function Home() {
         />
         <ol>
           <li>
-            <code>app/page.tsx</code> is the landing page for your application, currently being displayed.
+            <code>app/page.tsx</code> is the landing page for your application, currently being displayed. und Nacer isch en sehr nette Mensch
           </li>
           <li>
             <code>app/login/page.tsx</code> is the login page for users.
