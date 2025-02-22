@@ -18,6 +18,6 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of reporting
 
-      # # scan repo with sonar qube
-      # - name: SonarQube Scan
-      #   uses: SonarSource/sonarqube-scan-action@master
+      # scan repo with sonar qube
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
