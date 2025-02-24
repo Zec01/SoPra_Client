@@ -4,7 +4,11 @@
 // import { Card } from "antd"; // similar to /app/users/page.tsx
 import { Card } from "antd";
 
-export default function UserPage({ params }: { params: Record<string, string> }) {
+export default function UserPage({ params }: { params: { id?: string } }) {
+    if (!params?.id) {
+        return <div>Benutzer-ID fehlt!</div>;
+    }
+
     return (
         <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
             <Card title={`Benutzerprofil: ${params.id}`} style={{ width: 300 }}>
