@@ -19,11 +19,11 @@ const columns: TableProps<User>["columns"] = [
     dataIndex: "username",
     key: "username",
   },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
+  // {
+  //   title: "Password",
+  //   dataIndex: "name",
+  //   key: "name",
+  // },
   {
     title: "Id",
     dataIndex: "id",

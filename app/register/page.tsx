@@ -13,7 +13,7 @@ interface FormFieldProps {
   value: string;
 }
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
   const [form] = Form.useForm();
@@ -27,7 +27,7 @@ const Register: React.FC = () => {
   } = useLocalStorage<string>("token", ""); // note that the key we are selecting is "token" and the default value we are setting is an empty string
   // if you want to pick a different token, i.e "usertoken", the line above would look as follows: } = useLocalStorage<string>("usertoken", "");
 
-  const handleRegister = async (values: FormFieldProps) => {
+  const handleLogin = async (values: FormFieldProps) => {
     try {
       // Call the API service and let it handle JSON serialization and error handling
       const response = await apiService.post<User>("/users", values);
@@ -41,9 +41,9 @@ const Register: React.FC = () => {
       router.push("/users");
     } catch (error) {
       if (error instanceof Error) {
-        alert(`Something went wrong during the Register:\n${error.message}`);
+        alert(`Something went wrong during the register:\n${error.message}`);
       } else {
-        console.error("An unknown error occurred during Register.");
+        console.error("An unknown error occurred during register.");
       }
     }
   };
@@ -52,10 +52,10 @@ const Register: React.FC = () => {
     <div className="auth-container">
       <Form
         form={form}
-        name="register"
+        name="login"
         size="large"
         variant="outlined"
-        onFinish={handleRegister}
+        onFinish={handleLogin}
         layout="vertical"
       >
         <Form.Item
@@ -66,7 +66,7 @@ const Register: React.FC = () => {
           <Input placeholder="Enter username" />
         </Form.Item>
         <Form.Item
-          name="password"
+          name="name"
           label="Password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
@@ -82,4 +82,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Login;

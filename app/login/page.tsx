@@ -41,9 +41,9 @@ const Login: React.FC = () => {
       router.push("/users");
     } catch (error) {
       if (error instanceof Error) {
-        alert(`Something went wrong during the login:\n${error.message}`);
+        alert(`Something went wrong during the register:\n${error.message}`);
       } else {
-        console.error("An unknown error occurred during login.");
+        console.error("An unknown error occurred during register.");
       }
     }
   };
@@ -67,14 +67,14 @@ const Login: React.FC = () => {
         </Form.Item>
         <Form.Item
           name="name"
-          label="Name"
-          rules={[{ required: true, message: "Please input your name!" }]}
+          label="Password"
+          rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input placeholder="Enter name" />
+          <Input placeholder="Enter password" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="auth-button">
-            Login
+            Register
           </Button>
         </Form.Item>
       </Form>
