@@ -55,9 +55,8 @@ const Login: React.FC = () => {
         form={form}
         name="login"
         size="large"
-        variant="outlined"
-        onFinish={handleLogin}
         layout="vertical"
+        onFinish={handleLogin}
       >
         <Form.Item
           name="username"
@@ -67,11 +66,11 @@ const Login: React.FC = () => {
           <Input placeholder="Enter username" />
         </Form.Item>
         <Form.Item
-          name="password" // 🔹 Name geändert von `name` zu `password`
+          name="password"
           label="Password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password placeholder="Enter password" /> {/* 🔹 Passwortfeld hinzugefügt */}
+          <Input.Password placeholder="Enter password" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-button">
@@ -79,6 +78,12 @@ const Login: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+        Don't have an account?{" "}
+        <Button type="link" onClick={() => router.push("/register")}>
+          Register here
+        </Button>
+      </p>
     </div>
   );
 };
