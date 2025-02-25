@@ -24,7 +24,7 @@ export default function Home() {
             <code>app/page.tsx</code> is the landing page for your application, currently being displayed.
           </li>
           <li>
-            <code>app/login/page.tsx</code> is the login page for users.
+            <code>app/register/page.tsx</code> is the register page for users.
           </li>
           <li>
             <code>app/users/page.tsx</code> is the dashboard that shows an overview of all users, fetched from the server.
@@ -66,6 +66,13 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             Read our docs
+          </Button>
+          <Button
+            type="primary"
+            variant="solid"
+            onClick={() => router.push("/register")}
+          >
+            Go to register
           </Button>
           <Button
             type="primary"

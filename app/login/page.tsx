@@ -9,8 +9,8 @@ import { Button, Form, Input } from "antd";
 // import styles from "@/styles/page.module.css";
 
 interface FormFieldProps {
-  username: string;
-  password: string;
+  label: string;
+  value: string;
 }
 
 const Login: React.FC = () => {
@@ -30,8 +30,7 @@ const Login: React.FC = () => {
   const handleLogin = async (values: FormFieldProps) => {
     try {
       // Call the API service and let it handle JSON serialization and error handling
-      // 🔹 Hier wurde der richtige Login-Endpoint hinzugefügt (`/users/login` statt `/users`)
-      const response = await apiService.post<User>("/users/login", values);
+      const response = await apiService.post<User>("/users", values);
 
       // Use the useLocalStorage hook that returned a setter function (setToken in line 41) to store the token if available
       if (response.token) {
@@ -55,8 +54,9 @@ const Login: React.FC = () => {
         form={form}
         name="login"
         size="large"
-        layout="vertical"
+        variant="outlined"
         onFinish={handleLogin}
+        layout="vertical"
       >
         <Form.Item
           name="username"
@@ -66,11 +66,11 @@ const Login: React.FC = () => {
           <Input placeholder="Enter username" />
         </Form.Item>
         <Form.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          name="name"
+          label="Name"
+          rules={[{ required: true, message: "Please input your name!" }]}
         >
-          <Input.Password placeholder="Enter password" />
+          <Input placeholder="Enter name" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-button">
@@ -78,12 +78,6 @@ const Login: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-      <p style={{ textAlign: "center", marginTop: "10px" }}>
-        Don't have an account?{" "}
-        <Button type="link" onClick={() => router.push("/register")}>
-          Register here
-        </Button>
-      </p>
     </div>
   );
 };
