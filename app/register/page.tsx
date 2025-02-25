@@ -49,7 +49,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="register-container">
+    <div className="auth-container">
       <Form
         form={form}
         name="register"
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
           <Input placeholder="Enter password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="register-button">
+          <Button type="primary" htmlType="submit" className="auth-button">
             Register
           </Button>
         </Form.Item>

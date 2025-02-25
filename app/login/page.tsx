@@ -49,7 +49,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       <Form
         form={form}
         name="login"
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
           <Input placeholder="Enter name" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-button">
+          <Button type="primary" htmlType="submit" className="auth-button">
             Login
           </Button>
         </Form.Item>
