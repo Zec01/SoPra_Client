@@ -8,12 +8,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, Spin, Alert, Button } from "antd";
 import { useApi } from "@/hooks/useApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
 const UserProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const apiService = useApi();
+
+  const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,7 +28,7 @@ const UserProfile: React.FC = () => {
         const fetchedUser: User = await apiService.get<User>(`/users/${id}`);
         setUser(fetchedUser);
       } catch (err: any) {
-        setError(err.message || "Error loading");
+        setError(err.message || "Error loading user data");
       } finally {
         setLoading(false);
       }
@@ -44,7 +47,7 @@ const UserProfile: React.FC = () => {
           padding: "20px",
         }}
       >
-        <Spin tip="Lade Userdaten..." />
+        <Spin tip="Loading user data..." />
       </div>
     );
   }
@@ -59,10 +62,12 @@ const UserProfile: React.FC = () => {
           padding: "20px",
         }}
       >
-        <Alert message="Fehler" description={error} type="error" showIcon />
+        <Alert message="Error" description={error} type="error" showIcon />
       </div>
     );
   }
+
+  const isOwnProfile = Number(id) === loggedInUserId;
 
   return (
     <div
@@ -97,8 +102,7 @@ const UserProfile: React.FC = () => {
             <strong>Status:</strong> {user?.status}
           </p>
           <p>
-            <strong>Birthday:</strong>{" "}
-            {user?.birthday ? user.birthday : "N/A"}
+            <strong>Birthday:</strong> {user?.birthday ? user.birthday : "N/A"}
           </p>
         </Card>
 
@@ -109,13 +113,15 @@ const UserProfile: React.FC = () => {
             gap: "16px",
           }}
         >
-          <Button
-            type="primary"
-            className="auth-button"
-            onClick={() => alert("Edit functionality not implemented yet")}
-          >
-            Edit
-          </Button>
+          {isOwnProfile && (
+            <Button
+              type="primary"
+              className="auth-button"
+              onClick={() => router.push(`/users/${id}/edit`)}
+            >
+              Edit
+            </Button>
+          )}
           <Button
             type="primary"
             className="auth-button"
