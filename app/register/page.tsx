@@ -77,6 +77,11 @@ const Register: React.FC = () => {
             Register
           </Button>
         </Form.Item>
+        <Form.Item>
+          <Button type="primary" className="auth-button" onClick={() => router.push("/")}>
+            Back
+          </Button>
+        </Form.Item>
       </Form>
     </div>
   );
