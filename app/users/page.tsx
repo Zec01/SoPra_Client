@@ -12,11 +12,6 @@ import type { TableProps } from "antd"; // antd component library allows imports
 // Optionally, you can import a CSS module or file for additional styling:
 // import "@/styles/views/Dashboard.scss";
 
-interface FormFieldProps {
-  label: string;
-  value: string;
-}
-
 // Columns for the antd table of User objects
 const columns: TableProps<User>["columns"] = [
   {

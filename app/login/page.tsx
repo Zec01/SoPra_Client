@@ -28,7 +28,7 @@ const Login: React.FC = () => {
   // if you want to pick a different token, i.e "usertoken", the line above would look as follows: } = useLocalStorage<string>("usertoken", "");
   const { set: setUserId } = useLocalStorage<number>("userId", 0);
 
-  const handleLogin = async (values: { username: string; name: string }) => {
+  const handleLogin = async (values: FormFieldProps) => {
     try {
       // Call the API service and let it handle JSON serialization and error handling
       const response = await apiService.post<User>("/users/login", values);
