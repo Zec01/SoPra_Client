@@ -112,16 +112,16 @@ const UserProfile: React.FC = () => {
           <Button
             type="primary"
             className="auth-button"
-            onClick={() => router.push("/users")}
+            onClick={() => alert("Edit functionality not implemented yet")}
           >
-            Back
+            Edit
           </Button>
           <Button
             type="primary"
             className="auth-button"
-            onClick={() => alert("Edit functionality not implemented yet")}
+            onClick={() => router.push("/users")}
           >
-            Edit
+            Back
           </Button>
         </div>
       </div>

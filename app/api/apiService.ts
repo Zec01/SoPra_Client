@@ -50,6 +50,9 @@ export class ApiService {
       error.status = res.status;
       throw error;
     }
+    if (res.status === 204) {
+      return {} as T;
+    }
     return res.json() as Promise<T>;
   }
 
