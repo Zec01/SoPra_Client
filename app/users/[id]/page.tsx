@@ -27,13 +27,17 @@ const UserProfile: React.FC = () => {
       try {
         const fetchedUser: User = await apiService.get<User>(`/users/${id}`);
         setUser(fetchedUser);
-      } catch (err: any) {
-        setError(err.message || "Error loading user data");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error loading user data");
+        }
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchUser();
   }, [apiService, id]);
 
