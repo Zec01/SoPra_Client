@@ -11,6 +11,11 @@ import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
+interface FormFieldProps {
+  label: string;
+  value: string;
+}
+
 const UserProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();

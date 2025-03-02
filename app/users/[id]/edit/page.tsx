@@ -6,6 +6,11 @@ import { Form, Button, Input } from "antd";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 
+interface FormFieldProps {
+  label: string;
+  value: string;
+}
+
 const EditUser: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();

@@ -73,7 +73,7 @@ const Register: React.FC = () => {
           label="Password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input placeholder="Enter password" />
+          <Input type="password" placeholder="Enter password" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="auth-button">
