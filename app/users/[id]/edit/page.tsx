@@ -2,8 +2,9 @@
 
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Form, Button, Input } from "antd";
+import { Form, Button, Input, notification } from "antd";
 import { useApi } from "@/hooks/useApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
 const EditUser: React.FC = () => {
@@ -11,6 +12,19 @@ const EditUser: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
   const [form] = Form.useForm();
+
+  const { value: token } = useLocalStorage<string>("token", "");
+  useEffect(() => {
+    if (!token) {
+      notification.error({
+        message: "Access Denied",
+        description: "Please log in to access this page.",
+        placement: "topRight",
+        style: { width: "300px" },
+      });
+      router.push("/login");
+    }
+  }, [token, router]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,9 +34,14 @@ const EditUser: React.FC = () => {
           username: user.username || "",
           birthday: user.birthday || "",
         });
-      } catch (error) {
+      } catch (error: unknown) {
         if (error instanceof Error) {
-          alert(`Something went wrong while loading the user:\n${error.message}`);
+          notification.error({
+            message: "Error Loading User",
+            description: error.message,
+            placement: "topRight",
+            style: { width: "300px" },
+          });
         } else {
           console.error("An unknown error occurred while loading the user.");
         }
@@ -37,12 +56,34 @@ const EditUser: React.FC = () => {
         username: values.username,
         birthday: values.birthday || null,
       });
+      notification.success({
+        message: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+        placement: "topRight",
+        style: { width: "300px" },
+      });
       router.push(`/users/${id}`);
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
-        alert(`Something went wrong while updating the user:\n${error.message}`);
+        let errorMessage = error.message;
+        if (errorMessage.trim() === "400:" || errorMessage.trim() === "400: ") {
+          errorMessage = "Invalid birthday format. Please use YYYY-MM-DD.";
+        } else if (errorMessage.includes("Username already taken")) {
+          errorMessage = "The chosen username is already taken. Please choose another one.";
+        }
+        notification.error({
+          message: "Update Failed",
+          description: errorMessage || "An error occurred while updating the profile.",
+          placement: "topRight",
+          style: { width: "300px" },
+        });
       } else {
-        console.error("An unknown error occurred while updating the user.");
+        notification.error({
+          message: "Update Failed",
+          description: "An unknown error occurred while updating the profile.",
+          placement: "topRight",
+          style: { width: "300px" },
+        });
       }
     }
   };
@@ -55,6 +96,7 @@ const EditUser: React.FC = () => {
         size="large"
         layout="vertical"
         onFinish={onFinish}
+        style={{ maxWidth: 400 }}
       >
         <Form.Item
           name="username"
@@ -63,10 +105,7 @@ const EditUser: React.FC = () => {
         >
           <Input placeholder="Enter new username" />
         </Form.Item>
-        <Form.Item
-          name="birthday"
-          label="Birthday (YYYY-MM-DD)"
-        >
+        <Form.Item name="birthday" label="Birthday (YYYY-MM-DD)">
           <Input placeholder="YYYY-MM-DD" />
         </Form.Item>
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, notification } from "antd";
 // Optionally, you can import a CSS module or file for additional styling:
 // import styles from "@/styles/page.module.css";
 
@@ -40,13 +40,25 @@ const Login: React.FC = () => {
       if (response.id) {
         setUserId(Number(response.id));
       }
-      // Navigate to the user overview
+      notification.success({
+        message: "Login Successful",
+        description: "You have been successfully logged in.",
+        placement: "topRight",
+      });
       router.push("/users");
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
-        alert(`Something went wrong during the login:\n${error.message}`);
+        notification.error({
+          message: "Login Failed",
+          description: error.message || "An error occurred during login.",
+          placement: "topRight",
+        });
       } else {
-        console.error("An unknown error occurred during login.");
+        notification.error({
+          message: "Login Failed",
+          description: "An unknown error occurred during login.",
+          placement: "topRight",
+        });
       }
     }
   };
@@ -83,6 +95,15 @@ const Login: React.FC = () => {
         <Form.Item>
           <Button type="primary" className="auth-button" onClick={() => router.push("/")}>
             Back
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            className="auth-button"
+            onClick={() => router.push("/register")}
+          >
+            Don't have an account? Register
           </Button>
         </Form.Item>
       </Form>

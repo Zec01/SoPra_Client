@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
-import { Button, Card, Table } from "antd";
+import { Button, Card, Table, notification } from "antd";
 import type { TableProps } from "antd"; // antd component library allows imports of types
 // Optionally, you can import a CSS module or file for additional styling:
 // import "@/styles/views/Dashboard.scss";
@@ -35,6 +35,7 @@ const Dashboard: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
   const [users, setUsers] = useState<User[] | null>(null);
+
   // useLocalStorage hook example use
   // The hook returns an object with the value and two functions
   // Simply choose what you need from the hook:
@@ -42,20 +43,54 @@ const Dashboard: React.FC = () => {
     // value: token, // is commented out because we dont need to know the token value for logout
     // set: setToken, // is commented out because we dont need to set or update the token value
     clear: clearToken, // all we need in this scenario is a method to clear the token
-  } = useLocalStorage<string>("token", ""); // if you wanted to select a different token, i.e "lobby", useLocalStorage<string>("lobby", "");
+  } = useLocalStorage<string>("token", "");
+  // Here holen wir auch den token-Wert, um den Zugriff auf diese Seite zu schützen:
+  const { value: token } = useLocalStorage<string>("token", "");
+  
   const { value: userId, clear: clearUserId } = useLocalStorage<number>("userId", 0);
+
+  // Protect this page: If not logged in, redirect to login page.
+  useEffect(() => {
+    if (!token) {
+      notification.error({
+        message: "Access Denied",
+        description: "Please log in to access the users overview.",
+        placement: "topRight",
+        style: { width: "300px" },
+      });
+      router.push("/login");
+    }
+  }, [token, router]);
 
   const handleLogout = async (): Promise<void> => {
     try {
       await apiService.put(`/users/${userId}/logout`, {});
-      
+      notification.success({
+        message: "Logout Successful",
+        description: "You have been logged out successfully.",
+        placement: "topRight",
+        style: { width: "300px" },
+      });
       // Clear token using the returned function 'clear' from the hook
       clearToken();
       clearUserId();
       router.push("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      alert("Error logging out.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notification.error({
+          message: "Logout Failed",
+          description: error.message || "An error occurred during logout.",
+          placement: "topRight",
+          style: { width: "300px" },
+        });
+      } else {
+        notification.error({
+          message: "Logout Failed",
+          description: "An unknown error occurred during logout.",
+          placement: "topRight",
+          style: { width: "300px" },
+        });
+      }
     }
   };
 
@@ -69,7 +104,12 @@ const Dashboard: React.FC = () => {
         console.log("Fetched users:", users);
       } catch (error) {
         if (error instanceof Error) {
-          alert(`Something went wrong while fetching users:\n${error.message}`);
+          notification.error({
+            message: "Error fetching users",
+            description: error.message,
+            placement: "topRight",
+            style: { width: "300px" },
+          });
         } else {
           console.error("An unknown error occurred while fetching users.");
         }
