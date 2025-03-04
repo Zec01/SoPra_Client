@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
   const apiService = useApi();
   const [users, setUsers] = useState<User[] | null>(null);
 
-  const { value: token, clear: clearToken } = useLocalStorage<string>("token", "");
+  const { clear: clearToken } = useLocalStorage<string>("token", "");
   const { value: userId, clear: clearUserId } = useLocalStorage<number>("userId", 0);
 
   // Check directly for the token in localStorage; if not found, redirect to /login
