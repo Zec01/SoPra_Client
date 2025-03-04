@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
-import { Button, Form, Input, notification } from "antd";
+import { Button, Form, Input, message } from "antd";
 // Optionally, you can import a CSS module or file for additional styling:
 // import styles from "@/styles/page.module.css";
 
@@ -40,25 +40,13 @@ const Register: React.FC = () => {
       if (response.id) {
         setUserId(Number(response.id));
       }
-      notification.success({
-        message: "Registration Successful",
-        description: "You have been successfully registered and logged in.",
-        placement: "topRight",
-      });
+      message.success("Registration Successful: You have been successfully registered and logged in.");
       router.push("/users");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        notification.error({
-          message: "Registration Failed",
-          description: error.message || "An error occurred during registration.",
-          placement: "topRight",
-        });
+        message.error("Registration Failed: " + (error.message || "An error occurred during registration."));
       } else {
-        notification.error({
-          message: "Registration Failed",
-          description: "An unknown error occurred during registration.",
-          placement: "topRight",
-        });
+        message.error("Registration Failed: An unknown error occurred during registration.");
       }
     }
   };

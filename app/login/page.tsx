@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"; // use NextJS router for navigation
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
-import { Button, Form, Input, notification } from "antd";
+import { Button, Form, Input, message } from "antd";
 // Optionally, you can import a CSS module or file for additional styling:
 // import styles from "@/styles/page.module.css";
 
@@ -40,25 +40,13 @@ const Login: React.FC = () => {
       if (response.id) {
         setUserId(Number(response.id));
       }
-      notification.success({
-        message: "Login Successful",
-        description: "You have been successfully logged in.",
-        placement: "topRight",
-      });
+      message.success("Login Successful: You have been successfully logged in.");
       router.push("/users");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        notification.error({
-          message: "Login Failed",
-          description: error.message || "An error occurred during login.",
-          placement: "topRight",
-        });
+        message.error("Login Failed: " + (error.message || "An error occurred during login."));
       } else {
-        notification.error({
-          message: "Login Failed",
-          description: "An unknown error occurred during login.",
-          placement: "topRight",
-        });
+        message.error("Login Failed: An unknown error occurred during login.");
       }
     }
   };

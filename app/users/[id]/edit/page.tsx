@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Form, Button, Input, notification } from "antd";
+import { Form, Button, Input, message } from "antd";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 
@@ -22,12 +22,7 @@ const EditUser: React.FC = () => {
         });
       } catch (error: unknown) {
         if (error instanceof Error) {
-          notification.error({
-            message: "Error Loading User",
-            description: error.message,
-            placement: "topRight",
-            style: { width: "300px" },
-          });
+          message.error("Error Loading User: " + error.message);
         } else {
           console.error("An unknown error occurred while loading the user.");
         }
@@ -42,12 +37,7 @@ const EditUser: React.FC = () => {
         username: values.username,
         birthday: values.birthday || null,
       });
-      notification.success({
-        message: "Profile Updated",
-        description: "Your profile has been updated successfully.",
-        placement: "topRight",
-        style: { width: "300px" },
-      });
+      message.success("Profile Updated: Your profile has been updated successfully.");
       router.push(`/users/${id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -57,19 +47,9 @@ const EditUser: React.FC = () => {
         } else if (errorMessage.includes("Username already taken")) {
           errorMessage = "The chosen username is already taken. Please choose another one.";
         }
-        notification.error({
-          message: "Update Failed",
-          description: errorMessage || "An error occurred while updating the profile.",
-          placement: "topRight",
-          style: { width: "300px" },
-        });
+        message.error("Update Failed: " + errorMessage);
       } else {
-        notification.error({
-          message: "Update Failed",
-          description: "An unknown error occurred while updating the profile.",
-          placement: "topRight",
-          style: { width: "300px" },
-        });
+        message.error("Update Failed: An unknown error occurred while updating the profile.");
       }
     }
   };

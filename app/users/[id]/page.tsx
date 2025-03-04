@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Card, Alert, Button } from "antd";
+import { Card, Button, message } from "antd";
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
@@ -19,13 +19,16 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        // Fetch the user data from the backend
         const fetchedUser: User = await apiService.get<User>(`/users/${id}`);
         setUser(fetchedUser);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
+          message.error("Error loading user data: " + err.message);
         } else {
           setError("Error loading user data");
+          message.error("Error loading user data");
         }
       }
     };
@@ -33,62 +36,48 @@ const UserProfile: React.FC = () => {
     fetchUser();
   }, [apiService, id]);
 
-  if (error) {
-    return (
-      <div className="auth-container" style={{ width: "100%", minHeight: "100vh", padding: "20px" }}>
-        <Alert message="Error" description={error} type="error" showIcon />
-      </div>
-    );
-  }
-
   const isOwnProfile = Number(id) === loggedInUserId;
 
   return (
     <div
       className="auth-container"
-      style={{
-        width: "100%",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
+      style={{ width: "100%", minHeight: "100vh", padding: "20px" }}
     >
-      <div
-        style={{
-          maxWidth: "600px",
-          margin: "0 auto",
-        }}
-      >
-        <Card
-          title={`User Profile: ${user?.username}`}
-          bordered={false}
-          style={{ marginBottom: "20px" }}
-        >
-          <p>
-            <strong>ID:</strong> {user?.id}
-          </p>
-          <p>
-            <strong>Username:</strong> {user?.username}
-          </p>
-          <p>
-            <strong>Creation Date:</strong> {user?.creationDate}
-          </p>
-          <p>
-            <strong>Status:</strong> {user?.status}
-          </p>
-          <p>
-            <strong>Birthday:</strong> {user?.birthday ? user.birthday : "N/A"}
-          </p>
-        </Card>
+      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+        {user ? (
+          <Card
+            title={`User Profile: ${user.username}`}
+            bordered={false}
+            style={{ marginBottom: "20px" }}
+          >
+            <p>
+              <strong>ID:</strong> {user.id}
+            </p>
+            <p>
+              <strong>Username:</strong> {user.username}
+            </p>
+            <p>
+              <strong>Creation Date:</strong> {user.creationDate}
+            </p>
+            <p>
+              <strong>Status:</strong> {user.status}
+            </p>
+            <p>
+              <strong>Birthday:</strong> {user.birthday ? user.birthday : "N/A"}
+            </p>
+          </Card>
+        ) : (
+          // If user data is not available, display a loading message
+          <p>Loading user data...</p>
+        )}
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {isOwnProfile && (
-            <Button type="primary" className="auth-button" onClick={() => router.push(`/users/${id}/edit`)}>
+            <Button
+              type="primary"
+              className="auth-button"
+              onClick={() => router.push(`/users/${id}/edit`)}
+            >
               Edit
             </Button>
           )}

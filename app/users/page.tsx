@@ -1,5 +1,3 @@
-// this code is part of S2 to display a list of all registered users
-// clicking on a user in this list will display /app/users/[id]/page.tsx
 "use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
 
 import React, { useEffect, useState } from "react";
@@ -7,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
-import { Button, Card, Table, notification } from "antd";
+import { Button, Card, Table, message } from "antd";
 import type { TableProps } from "antd"; // antd component library allows imports of types
 // Optionally, you can import a CSS module or file for additional styling:
 // import "@/styles/views/Dashboard.scss";
@@ -50,30 +48,15 @@ const Dashboard: React.FC = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       await apiService.put(`/users/${userId}/logout`, {});
-      notification.success({
-        message: "Logout Successful",
-        description: "You have been logged out successfully.",
-        placement: "topRight",
-        style: { width: "300px" },
-      });
+      message.success("Logout Successful: You have been logged out successfully.");
       clearToken();
       clearUserId();
       router.push("/login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        notification.error({
-          message: "Logout Failed",
-          description: error.message || "An error occurred during logout.",
-          placement: "topRight",
-          style: { width: "300px" },
-        });
+        message.error("Logout Failed: " + (error.message || "An error occurred during logout."));
       } else {
-        notification.error({
-          message: "Logout Failed",
-          description: "An unknown error occurred during logout.",
-          placement: "topRight",
-          style: { width: "300px" },
-        });
+        message.error("Logout Failed: An unknown error occurred during logout.");
       }
     }
   };
@@ -88,12 +71,7 @@ const Dashboard: React.FC = () => {
         console.log("Fetched users:", users);
       } catch (error) {
         if (error instanceof Error) {
-          notification.error({
-            message: "Error fetching users",
-            description: error.message,
-            placement: "topRight",
-            style: { width: "300px" },
-          });
+          message.error("Error fetching users: " + error.message);
         } else {
           console.error("An unknown error occurred while fetching users.");
         }
