@@ -14,6 +14,7 @@ const UserProfile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
+  const isOwnProfile = Number(id) === loggedInUserId;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -39,8 +40,6 @@ const UserProfile: React.FC = () => {
     fetchUser();
   }, [apiService, id]);
 
-  const isOwnProfile = Number(id) === loggedInUserId;
-
   return (
     <div
       className="auth-container"
@@ -53,9 +52,6 @@ const UserProfile: React.FC = () => {
             bordered={false}
             style={{ marginBottom: "20px" }}
           >
-            <p>
-              <strong>ID:</strong> {user.id}
-            </p>
             <p>
               <strong>Username:</strong> {user.username}
             </p>

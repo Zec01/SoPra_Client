@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Form, Button, Input, message } from "antd";
 import { useApi } from "@/hooks/useApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
 const EditUser: React.FC = () => {
@@ -12,12 +13,21 @@ const EditUser: React.FC = () => {
   const apiService = useApi();
   const [form] = Form.useForm();
 
+  const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
+  const isOwnProfile = Number(id) === loggedInUserId;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.replace("/login");
     }
   }, [router]);
+
+  useEffect(() => {
+    if (!isOwnProfile){
+      router.replace("/users");
+    }
+  }, [id, isOwnProfile , router]);
 
   useEffect(() => {
     const fetchUser = async () => {
