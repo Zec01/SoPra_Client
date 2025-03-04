@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Form, Button, Input, message } from "antd";
 import { useApi } from "@/hooks/useApi";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
 const EditUser: React.FC = () => {
@@ -27,7 +26,7 @@ const EditUser: React.FC = () => {
     if (!isOwnProfile){
       router.replace("/users");
     }
-  }, [id, loggedInUserId , router]);
+  }, [router]);
 
   useEffect(() => {
     const fetchUser = async () => {
