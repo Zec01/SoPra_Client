@@ -44,23 +44,8 @@ const Dashboard: React.FC = () => {
     // set: setToken, // is commented out because we dont need to set or update the token value
     clear: clearToken, // all we need in this scenario is a method to clear the token
   } = useLocalStorage<string>("token", "");
-  // Here holen wir auch den token-Wert, um den Zugriff auf diese Seite zu schützen:
-  const { value: token } = useLocalStorage<string>("token", "");
   
   const { value: userId, clear: clearUserId } = useLocalStorage<number>("userId", 0);
-
-  // Protect this page: If not logged in, redirect to login page.
-  useEffect(() => {
-    if (!token) {
-      notification.error({
-        message: "Access Denied",
-        description: "Please log in to access the users overview.",
-        placement: "topRight",
-        style: { width: "300px" },
-      });
-      router.push("/login");
-    }
-  }, [token, router]);
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -71,7 +56,6 @@ const Dashboard: React.FC = () => {
         placement: "topRight",
         style: { width: "300px" },
       });
-      // Clear token using the returned function 'clear' from the hook
       clearToken();
       clearUserId();
       router.push("/login");

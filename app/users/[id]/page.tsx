@@ -15,20 +15,7 @@ const UserProfile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  const { value: token } = useLocalStorage<string>("token", "");
   const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
-
-  useEffect(() => {
-    if (!token) {
-      notification.error({
-        message: "Access Denied",
-        description: "Please log in to access this page.",
-        placement: "topRight",
-        style: { width: "300px" },
-      });
-      router.push("/login");
-    }
-  }, [token, router]);
 
   useEffect(() => {
     const fetchUser = async () => {

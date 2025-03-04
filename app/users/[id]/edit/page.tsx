@@ -13,19 +13,6 @@ const EditUser: React.FC = () => {
   const apiService = useApi();
   const [form] = Form.useForm();
 
-  const { value: token } = useLocalStorage<string>("token", "");
-  useEffect(() => {
-    if (!token) {
-      notification.error({
-        message: "Access Denied",
-        description: "Please log in to access this page.",
-        placement: "topRight",
-        style: { width: "300px" },
-      });
-      router.push("/login");
-    }
-  }, [token, router]);
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
