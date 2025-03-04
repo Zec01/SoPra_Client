@@ -13,8 +13,8 @@ const EditUser: React.FC = () => {
   const apiService = useApi();
   const [form] = Form.useForm();
 
-  const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
-  const isOwnProfile = Number(id) === loggedInUserId;
+  const loggedInUserId = localStorage.getItem("userId");
+  const isOwnProfile = id === loggedInUserId;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,7 +27,7 @@ const EditUser: React.FC = () => {
     if (!isOwnProfile){
       router.replace("/users");
     }
-  }, [id, isOwnProfile , router]);
+  }, [id, loggedInUserId , router]);
 
   useEffect(() => {
     const fetchUser = async () => {

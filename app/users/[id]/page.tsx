@@ -49,20 +49,20 @@ const UserProfile: React.FC = () => {
         {user ? (
           <Card
             title={`User Profile: ${user.username}`}
-            bordered={false}
             style={{ marginBottom: "20px" }}
           >
             <p>
               <strong>Username:</strong> {user.username}
             </p>
             <p>
+              <strong>Online Status:</strong> {user.status === "ONLINE" ? "🟢 Online" : "🔴 Offline"}
+            </p>
+            <p>
               <strong>Creation Date:</strong> {user.creationDate}
             </p>
+            
             <p>
-              <strong>Status:</strong> {user.status}
-            </p>
-            <p>
-              <strong>Birthday:</strong> {user.birthday ? user.birthday : "N/A"}
+              <strong>Birth Date:</strong> {user.birthday ? user.birthday : "N/A"}
             </p>
           </Card>
         ) : (
