@@ -1,4 +1,4 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled.
+"use client"; // SSR deaktiviert, damit Browser-APIs wie localStorage genutzt werden können
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -16,9 +16,15 @@ const UserProfile: React.FC = () => {
   const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  useEffect(() => {
     const fetchUser = async () => {
       try {
-        // Fetch the user data from the backend
         const fetchedUser: User = await apiService.get<User>(`/users/${id}`);
         setUser(fetchedUser);
       } catch (err: unknown) {
@@ -64,7 +70,6 @@ const UserProfile: React.FC = () => {
             </p>
           </Card>
         ) : (
-          // If user data is not available, display a loading message
           <p>Loading user data...</p>
         )}
 

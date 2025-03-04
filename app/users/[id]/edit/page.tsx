@@ -13,6 +13,13 @@ const EditUser: React.FC = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const user: User = await apiService.get<User>(`/users/${id}`);

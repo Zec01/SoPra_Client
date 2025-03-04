@@ -1,4 +1,4 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client"; // For components that require React hooks and browser APIs; SSR is disabled
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -6,11 +6,9 @@ import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 import { Button, Card, Table, message } from "antd";
-import type { TableProps } from "antd"; // antd component library allows imports of types
-// Optionally, you can import a CSS module or file for additional styling:
-// import "@/styles/views/Dashboard.scss";
+import type { TableProps } from "antd";
 
-// Columns for the antd table of User objects
+// Define the columns for the antd table of User objects
 const columns: TableProps<User>["columns"] = [
   {
     title: "Username",
@@ -34,17 +32,36 @@ const Dashboard: React.FC = () => {
   const apiService = useApi();
   const [users, setUsers] = useState<User[] | null>(null);
 
-  // useLocalStorage hook example use
-  // The hook returns an object with the value and two functions
-  // Simply choose what you need from the hook:
-  const {
-    // value: token, // is commented out because we dont need to know the token value for logout
-    // set: setToken, // is commented out because we dont need to set or update the token value
-    clear: clearToken, // all we need in this scenario is a method to clear the token
-  } = useLocalStorage<string>("token", "");
-  
+  const { value: token, clear: clearToken } = useLocalStorage<string>("token", "");
   const { value: userId, clear: clearUserId } = useLocalStorage<number>("userId", 0);
 
+  // Check directly for the token in localStorage; if not found, redirect to /login
+  useEffect(() => {
+    const directToken = localStorage.getItem("token");
+    if (!directToken) {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  // Fetch the list of users from the backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers: User[] = await apiService.get<User[]>("/users");
+        setUsers(fetchedUsers);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          message.error("Error fetching users: " + error.message);
+        } else {
+          message.error("Error fetching users: An unknown error occurred.");
+        }
+      }
+    };
+
+    fetchUsers();
+  }, [apiService]);
+
+  // Logout function
   const handleLogout = async (): Promise<void> => {
     try {
       await apiService.put(`/users/${userId}/logout`, {});
@@ -54,35 +71,12 @@ const Dashboard: React.FC = () => {
       router.push("/login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        message.error("Logout Failed: " + (error.message || "An error occurred during logout."));
+        message.error("Logout Failed: " + error.message);
       } else {
         message.error("Logout Failed: An unknown error occurred during logout.");
       }
     }
   };
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        // apiService.get<User[]> returns the parsed JSON object directly,
-        // thus we can simply assign it to our users variable.
-        const users: User[] = await apiService.get<User[]>("/users");
-        setUsers(users);
-        console.log("Fetched users:", users);
-      } catch (error) {
-        if (error instanceof Error) {
-          message.error("Error fetching users: " + error.message);
-        } else {
-          console.error("An unknown error occurred while fetching users.");
-        }
-      }
-    };
-
-    fetchUsers();
-  }, [apiService]); // dependency apiService does not re-trigger the useEffect on every render because the hook uses memoization (check useApi.tsx in the hooks).
-  // if the dependency array is left empty, the useEffect will trigger exactly once
-  // if the dependency array is left away, the useEffect will run on every state change. Since we do a state change to users in the useEffect, this results in an infinite loop.
-  // read more here: https://react.dev/reference/react/useEffect#specifying-reactive-dependencies
 
   return (
     <div className="card-container">
