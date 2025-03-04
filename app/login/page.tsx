@@ -103,7 +103,7 @@ const Login: React.FC = () => {
             className="auth-button"
             onClick={() => router.push("/register")}
           >
-            Don't have an account? Register
+            Not registered yet? Register
           </Button>
         </Form.Item>
       </Form>

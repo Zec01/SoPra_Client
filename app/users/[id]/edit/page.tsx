@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Form, Button, Input, notification } from "antd";
 import { useApi } from "@/hooks/useApi";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
 
 const EditUser: React.FC = () => {

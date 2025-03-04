@@ -18,14 +18,10 @@ export class ApiService {
    * and throw an error if the response is not OK.
    *
    * @param res - The response from fetch.
-   * @param errorMessage - A descriptive error message for this call.
    * @returns Parsed JSON data.
    * @throws ApplicationError if res.ok is false.
    */
-  private async processResponse<T>(
-    res: Response,
-    _errorMessage: string,
-  ): Promise<T> {
+  private async processResponse<T>(res: Response,): Promise<T> {
     if (!res.ok) {
       let errorDetail = res.statusText;
       try {
@@ -66,10 +62,7 @@ export class ApiService {
       method: "GET",
       headers: this.defaultHeaders,
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while fetching the data.\n",
-    );
+    return this.processResponse<T>(res);
   }
 
   /**
@@ -85,10 +78,7 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while posting the data.\n",
-    );
+    return this.processResponse<T>(res);
   }
 
   /**
@@ -104,10 +94,7 @@ export class ApiService {
       headers: this.defaultHeaders,
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while updating the data.\n",
-    );
+    return this.processResponse<T>(res);
   }
 
   /**
@@ -121,9 +108,6 @@ export class ApiService {
       method: "DELETE",
       headers: this.defaultHeaders,
     });
-    return this.processResponse<T>(
-      res,
-      "An error occurred while deleting the data.\n",
-    );
+    return this.processResponse<T>(res);
   }
 }

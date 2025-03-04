@@ -1,8 +1,8 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled.
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Card, Spin, Alert, Button, notification } from "antd";
+import { Card, Alert, Button } from "antd";
 import { useApi } from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { User } from "@/types/user";
@@ -12,7 +12,6 @@ const UserProfile: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
   const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
@@ -28,39 +27,15 @@ const UserProfile: React.FC = () => {
         } else {
           setError("Error loading user data");
         }
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchUser();
   }, [apiService, id]);
 
-  if (loading) {
-    return (
-      <div
-        className="auth-container"
-        style={{
-          width: "100%",
-          minHeight: "100vh",
-          padding: "20px",
-        }}
-      >
-        <Spin tip="Loading user data..." />
-      </div>
-    );
-  }
-
   if (error) {
     return (
-      <div
-        className="auth-container"
-        style={{
-          width: "100%",
-          minHeight: "100vh",
-          padding: "20px",
-        }}
-      >
+      <div className="auth-container" style={{ width: "100%", minHeight: "100vh", padding: "20px" }}>
         <Alert message="Error" description={error} type="error" showIcon />
       </div>
     );
@@ -113,11 +88,7 @@ const UserProfile: React.FC = () => {
           }}
         >
           {isOwnProfile && (
-            <Button
-              type="primary"
-              className="auth-button"
-              onClick={() => router.push(`/users/${id}/edit`)}
-            >
+            <Button type="primary" className="auth-button" onClick={() => router.push(`/users/${id}/edit`)}>
               Edit
             </Button>
           )}
