@@ -12,7 +12,6 @@ const UserProfile: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
   const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<string>("");
 
   const { value: loggedInUserId } = useLocalStorage<number>("userId", 0);
 
@@ -24,10 +23,8 @@ const UserProfile: React.FC = () => {
         setUser(fetchedUser);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message);
           message.error("Error loading user data: " + err.message);
         } else {
-          setError("Error loading user data");
           message.error("Error loading user data");
         }
       }
