@@ -1,4 +1,4 @@
-"use client";
+"use client"; // SSR disabled so that browser APIs (localStorage) can be used
 
 import React, { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -87,7 +87,28 @@ const EditUser: React.FC = () => {
         >
           <Input placeholder="Enter new username" />
         </Form.Item>
-        <Form.Item name="birthday" label="Birthday (YYYY-MM-DD)">
+        <Form.Item
+          name="birthday"
+          label="Birthday (YYYY-MM-DD)"
+          rules={[
+            {
+              validator: (_, value) => {
+                if (!value) {
+                  return Promise.resolve();
+                }
+                const inputDate = new Date(value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                if (inputDate >= tomorrow) {
+                  return Promise.reject(new Error("Birthday cannot be in the future."));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
           <Input placeholder="YYYY-MM-DD" />
         </Form.Item>
 
