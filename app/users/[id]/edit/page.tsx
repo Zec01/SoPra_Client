@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Form, Button, Input, message } from "antd";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
-import { totalmem } from "os";
 
 const EditUser: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +26,7 @@ const EditUser: React.FC = () => {
     if (!isOwnProfile){
       router.replace("/users");
     }
-  }, [router]);
+  }, [router, isOwnProfile]);
 
   useEffect(() => {
     const fetchUser = async () => {
