@@ -1,4 +1,4 @@
-"use client"; // For components that need React hooks and browser APIs, SSR has to be disabled
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";

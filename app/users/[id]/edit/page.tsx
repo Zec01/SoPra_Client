@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Form, Button, Input, message } from "antd";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
+import { totalmem } from "os";
 
 const EditUser: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -98,10 +99,8 @@ const EditUser: React.FC = () => {
                 }
                 const inputDate = new Date(value);
                 const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                if (inputDate >= tomorrow) {
+                today.setHours(1, 0, 0, 0);
+                if (inputDate > today) {
                   return Promise.reject(new Error("Birthday cannot be in the future."));
                 }
                 return Promise.resolve();

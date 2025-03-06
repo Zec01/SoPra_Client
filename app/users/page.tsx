@@ -1,4 +1,4 @@
-"use client"; // For components that require React hooks and browser APIs; SSR is disabled
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,6 @@ import { User } from "@/types/user";
 import { Button, Card, Table, message } from "antd";
 import type { TableProps } from "antd";
 
-// Define the columns for the antd table of User objects
 const columns: TableProps<User>["columns"] = [
   {
     title: "Username",
@@ -35,7 +34,6 @@ const Dashboard: React.FC = () => {
   const { clear: clearToken } = useLocalStorage<string>("token", "");
   const { value: userId, clear: clearUserId } = useLocalStorage<number>("userId", 0);
 
-  // Check directly for the token in localStorage; if not found, redirect to /login
   useEffect(() => {
     const directToken = localStorage.getItem("token");
     if (!directToken) {
@@ -43,7 +41,6 @@ const Dashboard: React.FC = () => {
     }
   }, [router]);
 
-  // Fetch the list of users from the backend
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -61,7 +58,6 @@ const Dashboard: React.FC = () => {
     fetchUsers();
   }, [apiService]);
 
-  // Logout function
   const handleLogout = async (): Promise<void> => {
     try {
       await apiService.put(`/users/${userId}/logout`, {});
@@ -87,7 +83,6 @@ const Dashboard: React.FC = () => {
       >
         {users && (
           <>
-            {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
             <Table<User>
               columns={columns}
               dataSource={users}

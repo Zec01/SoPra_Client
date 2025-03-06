@@ -1,4 +1,4 @@
-"use client"; // SSR deaktiviert, damit Browser-APIs wie localStorage genutzt werden können
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
